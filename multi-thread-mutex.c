@@ -2,7 +2,7 @@
  * @Author: 0xSchnappi 952768182@qq.com
  * @Date: 2024-08-12 17:26:47
  * @LastEditors: 0xSchnappi 952768182@qq.com
- * @LastEditTime: 2024-08-12 18:22:26
+ * @LastEditTime: 2024-08-13 09:27:22
  * @FilePath: /gnu-c/sync-mutil-thread.c
  * @Description: 多线程同步
  *

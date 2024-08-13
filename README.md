@@ -81,6 +81,7 @@ pthread_rwlock_unlock(&rwlock);
 ### 条件变量
 
 条件变量(`pthread_cond_t`)通常与互斥锁一起使用，以允许线程等待某个条件发生。条件变量能够使线程在等待某个条件的同时释放持有的互斥锁。
+**注意：**当信号量在wait前发送，就会造成信号丢失现象。
 
 ```shell
 
@@ -95,8 +96,13 @@ pthread_cond_wait(&cond, &mutex);
 // 当条件满足时继续执行
 pthread_mutex_unlock(&mutex);
 
-// 发出信号，唤醒等待线程
+// 发出信号，唤醒一个线程
 pthread_cond_signal(&cond);
+
+/* 发出信号，唤醒所有线程 */
+pthread_cond_broadcast (&cond);
+
+/**/
 
 ```
 
