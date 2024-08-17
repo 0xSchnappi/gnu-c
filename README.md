@@ -82,6 +82,7 @@ pthread_rwlock_unlock(&rwlock);
 
 条件变量(`pthread_cond_t`)通常与互斥锁一起使用，以允许线程等待某个条件发生。条件变量能够使线程在等待某个条件的同时释放持有的互斥锁。
 **注意：**当信号量在wait前发送，就会造成信号丢失现象。
+**本质：**条件变量就是线程等待cond条件满足时，去执行
 
 ```shell
 
@@ -103,6 +104,35 @@ pthread_cond_signal(&cond);
 pthread_cond_broadcast (&cond);
 
 /**/
+
+```
+
+### 信号量
+
+**本质：**：为了控制资源而设计，可以理解是一种特殊的锁。比如有三把铁锹，锁到一个保险柜里，你可是设置信号量的数量为3，那么就会有三把钥匙，任何想用铁锹的只需要发出申请，系统保管的钥匙的数量只要大于零，就会给你一把，你就能打开保险柜，获取一把铁锹，当呢归还铁锹后，钥匙又会交到系统保管。
+
+```shell
+
+/* 用value初始化信号量的值(就是最大访问资源的数量)，如果pshared为0，表示只能在当前进程中各个线程进行共享，如果pshared为1，则表示可以在进程中共享。 */
+int sem_init (sem_t * sem, int  pshared, unsigned int  value)
+
+/* 信号量销毁 */
+int sem_destroy (sem_t * sem) 
+
+/* 信号量P操作 */
+// 信号量的值减一，当信号量的值为零时，当前线程阻塞
+int sem_wait(sem_t * sem)
+
+// 如果当前信号量为0，不会阻塞当前线程，而会返回EAGAIN。
+int sem_trywait (sem_t * sem)
+
+/* 信号量V操作 */
+// 信号量的值加一
+int sem_post (sem_t * sem)
+
+/* 获取信号量的值 */
+int sem_getvalue (sem_t * sem, int * sval)
+
 
 ```
 
