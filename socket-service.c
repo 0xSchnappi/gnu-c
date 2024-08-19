@@ -2,7 +2,7 @@
  * @Author: 0xSchnappi 952768182@qq.com
  * @Date: 2024-08-18 22:59:02
  * @LastEditors: 0xSchnappi 952768182@qq.com
- * @LastEditTime: 2024-08-19 14:28:39
+ * @LastEditTime: 2024-08-19 14:41:54
  * @FilePath: /gnu-c/socket-service.c
  * @Description: 服务器端
  *
@@ -42,7 +42,7 @@ int main() {
   /* 1.创建服务端socket */
   listen_fd = socket(AF_INET, SOCK_STREAM, 0);
   if (listen_fd == -1) {
-    perror("create socket failed");
+    perror("socket");
     exit(EXIT_FAILURE);
   }
 
@@ -59,7 +59,7 @@ int main() {
 
   if (bind(listen_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) ==
       -1) {
-    perror("bind failed");
+    perror("bind");
     close(listen_fd);
     exit(EXIT_FAILURE);
   }
@@ -76,7 +76,7 @@ int main() {
   /* 3.创建epoll实例，并将服务端socket注册到epoll */
   epoll_fd = epoll_create1(0); // 创建epoll实例，参数设置文件描述符的属性
   if (epoll_fd == -1) {
-    perror("epoll_create1 failed");
+    perror("epoll_create1");
     close(listen_fd);
     exit(EXIT_FAILURE);
   }
@@ -84,7 +84,7 @@ int main() {
   event.events = EPOLLIN; // 关联文件的读取操作
   event.data.fd = listen_fd;
   if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, listen_fd, &event) == -1) {
-    perror("epoll_ctl failed");
+    perror("epoll_ctl");
     close(listen_fd);
     close(epoll_fd);
     exit(EXIT_FAILURE);
@@ -94,7 +94,7 @@ int main() {
   while (1) {
     int n_fds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
     if (n_fds == -1) {
-      perror("epoll_wait failed");
+      perror("epoll_wait");
       close(listen_fd);
       close(epoll_fd);
       exit(EXIT_FAILURE);
@@ -107,7 +107,7 @@ int main() {
         int csize = 0;
         conn_fd = accept(listen_fd, (struct sockaddr*)&caddr, &csize);
         if (conn_fd == -1) {
-          perror("accept failed");
+          perror("accept");
           continue;
         }
 
@@ -115,7 +115,7 @@ int main() {
         event.events = EPOLLIN;
         event.data.fd = conn_fd;
         if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, conn_fd, &event) == -1) {
-          perror("epoll_ctl failed");
+          perror("epoll_ctl");
           close(conn_fd);
         }
 
@@ -128,7 +128,7 @@ int main() {
             /* 对方关闭连接 */
             printf("Client disconnected\n");
           } else {
-            perror("read failed");
+            perror("read");
           }
 
           close(events[i].data.fd); // 关闭连接
