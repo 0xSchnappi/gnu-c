@@ -2,8 +2,8 @@
  * @Author: 0xSchnappi 952768182@qq.com
  * @Date: 2024-08-06 20:16:43
  * @LastEditors: 0xSchnappi 952768182@qq.com
- * @LastEditTime: 2024-08-10 00:54:26
- * @FilePath: /Linux-kernel-start/src/GUN-C-Extend.c
+ * @LastEditTime: 2024-08-18 10:56:56
+ * @FilePath: /gnu-c/GUN-C-Extend.c
  * @Description: GUN C 扩展
  *
  * Copyright (c) 2024 by github.com/0xSchnappi, All Rights Reserved.
@@ -100,6 +100,14 @@ struct example {
   unsigned int d : 5; // 位域，位对齐
   unsigned int e : 8; // 位域，位对齐
 } __attribute__((packed));
+
+/* 这个结构体是Linux红黑树 */
+// aligned(sizeof(long))指定对齐大小为long
+struct rb_node {
+	unsigned long  __rb_parent_color;
+	struct rb_node *rb_right;
+	struct rb_node *rb_left;
+} __attribute__((aligned(sizeof(long))));
 
 /**
  * 8.内建函数
